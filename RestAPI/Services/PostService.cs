@@ -47,6 +47,8 @@ namespace RestAPI.Services
         public async Task<bool> DeletePostAsync(Guid postId)
         {
             var post = await GetPostByIdAsync(postId);
+            if (post == null)
+                return false;
 
             _dataContext.Posts.Remove(post);
             var removed = await _dataContext.SaveChangesAsync();
