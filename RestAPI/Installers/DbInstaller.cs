@@ -17,7 +17,7 @@ namespace RestAPI.Installers
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<DataContext>();
 
-            services.AddSingleton<IPostService, PostService>();
+            services.AddScoped<IPostService, PostService>();
         }
     }
 }
