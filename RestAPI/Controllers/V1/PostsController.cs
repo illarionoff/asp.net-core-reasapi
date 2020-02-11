@@ -1,27 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using RestAPI.Contracts.V1;
 using RestAPI.Contracts.V1.Requests;
 using RestAPI.Contracts.V1.Responses;
 using RestAPI.Domain;
+using RestAPI.Services;
 
 namespace RestAPI.Controllers.V1
 {
     public class PostsController : Controller
     {
-        private readonly List<Post> _posts;
+        private readonly IPostService _postService;
 
-        public PostsController()
+        public PostsController(IPostService postService)
         {
-            _posts = new List<Post>();
-            for (var i = 0; i < 5; i++) _posts.Add(new Post {Id = Guid.NewGuid().ToString()});
+            _postService = postService;
         }
 
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public IActionResult GetAll()
         {
-            return Ok(_posts);
+            return Ok(_postService.GetPosts());
+        }
+
+        [HttpGet(ApiRoutes.Posts.Get)]
+        public IActionResult Get(Guid postId)
+        {
+            var post = _postService.GetPostById(postId);
+
+            if (post == null)
+                return NotFound();
+
+            return Ok(post);
         }
 
         [HttpPost(ApiRoutes.Posts.Create)]
@@ -29,22 +39,21 @@ namespace RestAPI.Controllers.V1
         {
             var post = new Post
             {
-                Id = postRequest.Id
+                Id = postRequest.Id,
+                Name = postRequest.Name
             };
 
-            if (string.IsNullOrEmpty(post.Id))
-            {
-                post.Id = Guid.NewGuid().ToString();
-            }
+            if (post.Id != Guid.Empty) post.Id = Guid.NewGuid();
 
-            _posts.Add(post);
+            _postService.GetPosts().Add(post);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var locationUrl = baseUrl + "/" + ApiRoutes.Posts.Get.Replace("{postId}", post.Id);
+            var locationUrl = baseUrl + "/" + ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString());
 
             var response = new PostResponse
             {
-                Id = post.Id
+                Id = post.Id,
+                Name = post.Name
             };
 
             return Created(locationUrl, response);

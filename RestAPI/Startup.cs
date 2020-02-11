@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.VisualBasic;
 using RestAPI.Installers;
 using RestAPI.Options;
+using RestAPI.Services;
 
 namespace RestAPI
 {
@@ -32,6 +33,7 @@ namespace RestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.InstallServiceAssembly(Configuration);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
