@@ -53,6 +53,19 @@ namespace RestAPI.Controllers.V1
             return Ok(post);
         }
 
+        [HttpDelete(ApiRoutes.Posts.Delete)]
+        public IActionResult Delete(Guid postId)
+        {
+            var removed = _postService.DeletePost(postId);
+
+            if (!removed)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
         [HttpPost(ApiRoutes.Posts.Create)]
         public IActionResult Create([FromBody] CreatePostRequest postRequest)
         {
