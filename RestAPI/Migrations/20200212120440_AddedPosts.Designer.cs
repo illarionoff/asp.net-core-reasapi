@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestAPI.Data;
 
-namespace RestAPI.Data.Migrations
+namespace RestAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200211121833_AddedPosts")]
+    [Migration("20200212120440_AddedPosts")]
     partial class AddedPosts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
